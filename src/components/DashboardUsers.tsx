@@ -100,7 +100,10 @@ const DashboardUser = () => {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={4} className="text-right">
+          <TableCell
+            colSpan={4}
+            className="text-right bg-white dark:bg-neutral-500"
+          >
             <a
               href="/"
               className={buttonVariants({ variant: "ghost", size: "sm" })}

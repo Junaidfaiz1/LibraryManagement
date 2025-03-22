@@ -6,8 +6,8 @@ import { BookOpenCheck } from "lucide-react";
 
 const DashboardMetaData: React.FC = () => {
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ">
-      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 light:bg-white dark:bg-neutral-500 rounded-lg">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 ">
+      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 bg-white dark:bg-neutral-500 rounded-lg">
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
@@ -25,7 +25,7 @@ const DashboardMetaData: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 light:bg-white dark:bg-neutral-500 rounded-lg">
+      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 bg-white dark:bg-neutral-500 rounded-lg">
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
@@ -46,7 +46,7 @@ const DashboardMetaData: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 light:bg-white dark:bg-neutral-500 rounded-lg">
+      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 bg-white dark:bg-neutral-500 rounded-lg">
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
@@ -67,7 +67,7 @@ const DashboardMetaData: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 light:bg-white dark:bg-neutral-500 rounded-lg">
+      <div className="flex items-center dark:shadow-xl dark:shadow-gray-800 shadow-xl  p-4 sm:p-6 lg:p-8 bg-white dark:bg-neutral-500 rounded-lg">
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">

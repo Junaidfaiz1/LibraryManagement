@@ -23,8 +23,6 @@ import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { buttonVariants } from "./ui/button";
 
-
-
 const invoices = [
   {
     invoice: "INV004",
@@ -54,7 +52,7 @@ const invoices = [
 
 const DashboardUser = () => {
   return (
-    <Table>
+    <Table className="">
       <TableHeader>
         <TableRow>
           <TableHead className="text-left">Book Name</TableHead>
@@ -102,7 +100,7 @@ const DashboardUser = () => {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={4} className="text-right">
+          <TableCell colSpan={4} className="text-right  bg-white dark:bg-neutral-500">
             <a
               href="/"
               className={buttonVariants({ variant: "ghost", size: "sm" })}

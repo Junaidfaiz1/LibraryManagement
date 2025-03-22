@@ -1,4 +1,6 @@
 import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper/modules";
 
 export interface Artwork {
   artist: string;
@@ -34,8 +36,41 @@ export const works: Artwork[] = [
 
 const BookSuggestion: React.FC = () => {
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-      <h1 className="text-2xl font-medium dark:text-white">Top Choices</h1>
+    <div className="w-full  gap-4 p-4">
+      <div className="">
+        <h1 className="text-2xl font-medium dark:text-white">Top Choices</h1>
+      </div>
+      <Swiper
+        modules={[Navigation, Autoplay]}
+        autoplay={{ delay: 2500 }}
+        spaceBetween={50}
+        slidesPerView={5}
+        loop={true}
+        scrollbar={{ draggable: true }}
+        navigation
+        className="py-16 mb-16"
+      >
+        {works.map((work, index) => (
+          <SwiperSlide key={index}>
+            <div>
+              <img
+                src={work.art}
+                style={{ filter: "grayscale(50%)", transition: "filter 0.3s" }}
+                alt={work.artist}
+                className="h-64 object-cover rounded-lg"
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.filter =
+                    "grayscale(0%) brightness(100%)")
+                }
+                onMouseOut={(e) =>
+                  (e.currentTarget.style.filter = "grayscale(50%)")
+                }
+              />
+              <p>{work.artist}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };

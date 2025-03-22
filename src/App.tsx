@@ -4,7 +4,7 @@ import ModeToggle from "./components/mode-toggle";
 import DashboardMetaData from "./components/DashboardMetaData";
 import BookSuggestion from "./components/BookSuggestion";
 import UserAndBookLists from "./Pages/UserAndBookLists";
-
+import IssuedBookDashboard from "./Pages/IssuedAndGraph";
 function App() {
   return (
     <>
@@ -13,6 +13,7 @@ function App() {
         <DashboardMetaData />
         <UserAndBookLists />
         <BookSuggestion />
+        <IssuedBookDashboard />
       </ThemeProvider>
     </>
   );

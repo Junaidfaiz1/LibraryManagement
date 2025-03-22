@@ -1,6 +1,31 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  
 }
+
+body {
+  background-color: rgb(249, 249, 249);
+}
+
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ff69b4 !important;
+  
+  padding: 20px;
+  border-radius: 50%;
+  transform: scale(0.7);
+}
+
+.swiper-button-disabled {
+  opacity: 0.5 !important;
+}
+
+
+

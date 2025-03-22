@@ -6,15 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 
 import {
   DropdownMenu,
@@ -57,21 +48,20 @@ const invoices = [
   },
 ];
 
-const DashboardUser = () => {
+const IssuedBookDashboard = () => {
   return (
-    <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col mt-10">
+    <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col">
       <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700  p-4">
         Overdue Book List
       </h1>
       <Table className="w-full">
         <TableHeader>
           <TableRow className="h-12 ">
-            <TableHead className="text-left">User Name</TableHead>
             <TableHead className="text-left">Book Name</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Overdue</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            <TableHead className="text-left">Issued Date</TableHead>
+            <TableHead>Return Date</TableHead>
+
+            <TableHead className="text-right">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -80,8 +70,7 @@ const DashboardUser = () => {
               <TableCell className="text-left font-medium">
                 {invoice.invoice}
               </TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+              
               <TableCell>{invoice.paymentStatus}</TableCell>
               <TableCell>{invoice.paymentMethod}</TableCell>
 
@@ -114,38 +103,9 @@ const DashboardUser = () => {
           ))}
         </TableBody>
       </Table>
-      <div>
-        <Pagination className="flex justify-end mt-4">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                className="bg-custompink dark:bg-custompink"
-                isActive
-              >
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+     
     </div>
   );
 };
 
-export default DashboardUser;
+export default IssuedBookDashboard;
