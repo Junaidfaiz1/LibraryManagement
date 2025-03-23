@@ -10,8 +10,34 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRef, useState } from "react";
+import ImagePoster from "@/assets/TCgR7rV1SqCxtjpJwfrGQg.jpeg"
+
 
 const AddBook = () => {
+  const imgref = useRef<HTMLInputElement>(null);
+  const [image, setImage] = useState<string | null>(ImagePoster);
+
+  const SelectImage = () => {
+    if (imgref.current) {
+      imgref.current.click();
+    }
+  };
+
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    const reader = new FileReader();
+    if (file) {
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImage(result);
+        console.log(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -52,8 +78,16 @@ const AddBook = () => {
             <Input
               id="Image"
               type="file"
+              ref={imgref}
+              onChange={handleImage}
               accept="image/*"
-              className="col-span-3"
+              className="col-span-3 hidden"
+            />
+            <img
+              src={image || ""}
+              onClick={SelectImage}
+              alt="This is image"
+              className="h-16  object-cover cursor-pointer rounded-lg ml-12"
             />
           </div>
         </div>
