@@ -4,7 +4,8 @@ import { buttonVariants } from "@/components/ui/button";
 import DashboardUser from "@/components/DashboardUsers";
 import DashboardBook from "@/components/DashboardBooks";
 import OverdueBookList from "@/components/OverdueBookLists";
-
+import AddUser from "@/components/AddUser";
+import AddBook from "@/components/AddBook";
 const UserAndBookLists: React.FC = () => {
   return (
     <div>
@@ -15,12 +16,7 @@ const UserAndBookLists: React.FC = () => {
               Users Lists
             </h1>
             <div>
-              <a
-                href="/"
-                className={buttonVariants({ variant: "outline", size: "lg" })}
-              >
-                <p className=" dark:text-white">Add new Users</p>
-              </a>
+              <AddUser />
             </div>
           </div>
           <DashboardUser />
@@ -31,12 +27,7 @@ const UserAndBookLists: React.FC = () => {
               Books Lists
             </h1>
             <div>
-              <a
-                href="/"
-                className={buttonVariants({ variant: "outline", size: "lg" })}
-              >
-                Add New User
-              </a>
+             <AddBook />
             </div>
           </div>
           <DashboardBook />
