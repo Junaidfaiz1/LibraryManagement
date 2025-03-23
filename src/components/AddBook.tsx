@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Toast } from "./ToastMessage";
+
 import {
   Dialog,
   DialogContent,
@@ -8,15 +10,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRef, useState } from "react";
-import ImagePoster from "@/assets/TCgR7rV1SqCxtjpJwfrGQg.jpeg"
-
+import ImagePoster from "@/assets/TCgR7rV1SqCxtjpJwfrGQg.jpeg";
 
 const AddBook = () => {
   const imgref = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<string | null>(ImagePoster);
+
+  const [formdata, setFormdata] = useState<{
+    name: string;
+    Author: string;
+    image: string;
+    Quantity: number;
+  }>({
+    name: "",
+    Author: "",
+    image: ImagePoster,
+    Quantity: 0,
+  });
 
   const SelectImage = () => {
     if (imgref.current) {
@@ -30,13 +43,40 @@ const AddBook = () => {
     if (file) {
       reader.onloadend = () => {
         const result = reader.result as string;
-        setImage(result);
-        console.log(result);
+        setFormdata({ ...formdata, image: result });
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const HandelSubmit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:3000/api/addbook", {
+        title: formdata.name,
+        image: formdata.image,
+        quantity: formdata.Quantity,
+        author: formdata.Author,
+      });
+      console.log(res);
+      if (res.status === 200) {
+        setFormdata({
+          name: "",
+          Quantity: 0,
+          Author: "",
+          image: ImagePoster,
+        });
+        Toast.success(res.data.message);
+       
+      } else {
+        Toast.error(res.data.error);
+      }
+    } catch (error) {
+      Toast.error("An error occurred while adding the book.");
+      console.error(error);
+    }
+  }
 
   return (
     <Dialog>
@@ -57,19 +97,43 @@ const AddBook = () => {
             <Label htmlFor="name" className="text-right">
               Book Name
             </Label>
-            <Input id="name" type="text" className="col-span-3" />
+            <Input
+              id="name"
+              onChange={(e) => {
+                setFormdata({ ...formdata, name: e.target.value });
+              }}
+              type="text"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Author" className="text-right">
               Author
             </Label>
-            <Input id="Author" type="text" className="col-span-3" />
+            <Input
+              id="Author"
+              onChange={(e) => {
+                setFormdata({ ...formdata, Author: e.target.value });
+              }}
+              type="text"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Quantity" className="text-right">
               Quantity
             </Label>
-            <Input id="Quantity" type="number" className="col-span-3" />
+            <Input
+              id="Quantity"
+              onChange={(e) => {
+                setFormdata({
+                  ...formdata,
+                  Quantity: parseInt(e.target.value),
+                });
+              }}
+              type="number"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Image" className="text-right">
@@ -84,7 +148,7 @@ const AddBook = () => {
               className="col-span-3 hidden"
             />
             <img
-              src={image || ""}
+              src={formdata.image}
               onClick={SelectImage}
               alt="This is image"
               className="h-16  object-cover cursor-pointer rounded-lg ml-12"
@@ -92,7 +156,9 @@ const AddBook = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Add Book</Button>
+          <Button type="submit" onClick={HandelSubmit}>
+            Add Book
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
