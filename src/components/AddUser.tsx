@@ -10,10 +10,63 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-
+import axios from "axios";
+import { useState } from "react";
+import { Toast } from "./ToastMessage";
 
 const AddUser = () => {
+  const [formdata, setFormdata] = useState<{
+    name: string;
+    email: string;
+    registration: string;
+    department: string;
+    password: string;
+  }>({
+    name: "",
+    email: "",
+    registration: "",
+    department: "",
+    password: "",
+  });
+
+  const HandleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (
+      formdata.name === "" ||
+      formdata.email === "" ||
+      formdata.registration === "" ||
+      formdata.department === "" ||
+      formdata.password === ""
+    ) {
+      Toast.error("Please fill all the fields");
+      return;
+    }
+    console.log(formdata);
+    try {
+      const res = await axios.post("http://localhost:3000/api/register", {
+        name: formdata.name,
+        email: formdata.email,
+        rnumber: formdata.registration,
+        department: formdata.department,
+        password: formdata.password,
+      });
+      if (res.status === 200) {
+        Toast.success(res.data.message);
+        setFormdata({
+          name: "",
+          email: "",
+          department: "",
+          registration: "",
+          password: "",
+        });
+      } else {
+        Toast.error(res.data.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -33,29 +86,77 @@ const AddUser = () => {
             <Label htmlFor="name" className="text-right">
               User Name
             </Label>
-            <Input id="name" type="text" className="col-span-3" />
+            <Input
+              id="name"
+              value={formdata.name}
+              onChange={(e) => {
+                setFormdata({ ...formdata, name: e.target.value });
+              }}
+              type="text"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Email" className="text-right">
               Email
             </Label>
-            <Input id="Email" type="email" className="col-span-3" />
+            <Input
+            value={formdata.email}
+              id="Email"
+              onChange={(e) => {
+                setFormdata({ ...formdata, email: e.target.value });
+              }}
+              type="email"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Registration" className="text-start ">
               Registration Number
             </Label>
-            <Input id="Registration" type="text" className="col-span-3" />
+            <Input
+            value={formdata.registration}
+              id="Registration"
+              onChange={(e) => {
+                setFormdata({ ...formdata, registration: e.target.value });
+              }}
+              type="text"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="Department" className="text-start ">
+              Department
+            </Label>
+            <Input
+            value={formdata.department}
+              id="Department"
+              onChange={(e) => {
+                setFormdata({ ...formdata, department: e.target.value });
+              }}
+              type="text"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Password" className="text-right">
               Password
             </Label>
-            <Input id="Password" type="password" className="col-span-3" />
+            <Input
+            value={formdata.password}
+              id="Password"
+              onChange={(e) => {
+                setFormdata({ ...formdata, password: e.target.value });
+              }}
+              type="password"
+              className="col-span-3"
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Add Book</Button>
+          <Button type="button" onClick={HandleSubmit}>
+            Add User
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

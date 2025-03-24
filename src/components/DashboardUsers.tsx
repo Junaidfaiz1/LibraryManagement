@@ -22,54 +22,64 @@ import { UserRoundX } from "lucide-react";
 import { UserPen } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { buttonVariants } from "./ui/button";
-
-const invoices = [
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const DashboardUser = () => {
+  const [users, setUsers] = useState<
+    {
+      _id: number;
+      name: string;
+      email: string;
+      rnumber: string;
+      department: string;
+      password: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    try {
+      axios.get("http://localhost:3000/api/userdashboard").then((res) => {
+        setUsers(res.data);
+      });
+    } catch (error) {
+      toast.error("Error in fetching data");
+    }
+  }, []);
+
+  const Handlesubmit = async (id: number) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/api/deleteuser/${id}`
+      );
+      if (res.status === 200) {
+        setUsers(() => res.data);
+        toast.success("User Removed Successfully");
+      }
+    } catch (error) {
+      toast.error("Error in removing user");
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-left">User Name</TableHead>
-          <TableHead>Book Issued</TableHead>
-          <TableHead>Department</TableHead>
+          <TableHead className="text-left">Name</TableHead>
+          <TableHead className="text-center">Registration Number</TableHead>
+          <TableHead className="text-center">Department</TableHead>
+          <TableHead className="text-center">Email</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow className="h-12" key={invoice.invoice}>
-            <TableCell className="text-left font-medium">
-              {invoice.invoice}
-            </TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-
+        {users.map((user, index) => (
+          <TableRow key={index} className="h-12">
+            <TableCell className="text-left font-medium">{user.name}</TableCell>
+            <TableCell className="text-center">{user.rnumber}</TableCell>
+            <TableCell className="text-center">{user.department}</TableCell>
+            <TableCell className="text-center">{user.email}</TableCell>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <TableCell className="float-right mr-3">
@@ -87,7 +97,13 @@ const DashboardUser = () => {
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    Remove User
+                    <button
+                      onClick={() => {
+                        Handlesubmit(user._id);
+                      }}
+                    >
+                      Remove User
+                    </button>
                     <DropdownMenuShortcut>
                       <UserRoundX />
                     </DropdownMenuShortcut>

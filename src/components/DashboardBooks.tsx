@@ -18,7 +18,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NotebookPen } from "lucide-react";
+// import { NotebookPen } from "lucide-react";
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { buttonVariants } from "./ui/button";
@@ -48,7 +48,7 @@ const DashboardUser = () => {
         `http://localhost:3000/api/deletebook/${id}`
       );
       if (res.status === 200) {
-        setBooks((prevBooks) => prevBooks.filter((book) => book._id !== id));
+        setBooks(() => res.data);
       }
     } catch (error) {
       console.log(error);

@@ -68,7 +68,6 @@ const AddBook = () => {
           image: ImagePoster,
         });
         Toast.success(res.data.message);
-       
       } else {
         Toast.error(res.data.error);
       }
@@ -76,7 +75,7 @@ const AddBook = () => {
       Toast.error("An error occurred while adding the book.");
       console.error(error);
     }
-  }
+  };
 
   return (
     <Dialog>
@@ -99,6 +98,7 @@ const AddBook = () => {
             </Label>
             <Input
               id="name"
+              value={formdata.name}
               onChange={(e) => {
                 setFormdata({ ...formdata, name: e.target.value });
               }}
@@ -111,6 +111,7 @@ const AddBook = () => {
               Author
             </Label>
             <Input
+            value={formdata.Author}
               id="Author"
               onChange={(e) => {
                 setFormdata({ ...formdata, Author: e.target.value });
@@ -124,6 +125,7 @@ const AddBook = () => {
               Quantity
             </Label>
             <Input
+            value={formdata.Quantity}
               id="Quantity"
               onChange={(e) => {
                 setFormdata({
@@ -140,6 +142,7 @@ const AddBook = () => {
               Image
             </Label>
             <Input
+          
               id="Image"
               type="file"
               ref={imgref}
