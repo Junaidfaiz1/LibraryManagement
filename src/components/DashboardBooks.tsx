@@ -60,8 +60,8 @@ const DashboardUser = () => {
       <TableHeader>
         <TableRow>
           <TableHead className="text-left">Book Name</TableHead>
-          <TableHead>Author</TableHead>
-          <TableHead>Available</TableHead>
+          <TableHead className="text-center">Author</TableHead>
+          <TableHead className="text-center">Available</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -71,8 +71,8 @@ const DashboardUser = () => {
             <TableCell className="text-left font-medium">
               {book.title}
             </TableCell>
-            <TableCell>{book.author}</TableCell>
-            <TableCell>{book.quantity}</TableCell>
+            <TableCell className="text-center">{book.author}</TableCell>
+            <TableCell className="text-center">{book.quantity}</TableCell>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <TableCell className="float-right mr-3">

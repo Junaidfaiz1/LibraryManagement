@@ -20,6 +20,7 @@ import {
 import { NotebookPen } from "lucide-react";
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
+import IssueBook from "./IssueBook";
 
 const invoices = [
   {
@@ -51,9 +52,14 @@ const invoices = [
 const IssuedBookDashboard = () => {
   return (
     <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col">
-      <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700  p-4">
-        Overdue Book List
-      </h1>
+      <div className="flex justify-between items-center p-4">
+        <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
+          Issue Book
+        </h1>
+        <div>
+          <IssueBook />
+        </div>
+      </div>
       <Table className="w-full">
         <TableHeader>
           <TableRow className="h-12 ">
@@ -70,7 +76,7 @@ const IssuedBookDashboard = () => {
               <TableCell className="text-left font-medium">
                 {invoice.invoice}
               </TableCell>
-              
+
               <TableCell>{invoice.paymentStatus}</TableCell>
               <TableCell>{invoice.paymentMethod}</TableCell>
 
@@ -103,7 +109,6 @@ const IssuedBookDashboard = () => {
           ))}
         </TableBody>
       </Table>
-     
     </div>
   );
 };

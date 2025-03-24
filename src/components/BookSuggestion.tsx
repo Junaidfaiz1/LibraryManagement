@@ -1,40 +1,25 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-export interface Artwork {
-  artist: string;
-  art: string;
-}
 
-export const works: Artwork[] = [
-  {
-    artist: "Ornella Binni",
-    art: "https://images.unsplash.com/photo-1465869185982-5a1a7522cbcb?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    artist: "Tom Byrom",
-    art: "https://images.unsplash.com/photo-1548516173-3cabfa4607e9?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    artist: "Vladimir Malyavko",
-    art: "https://images.unsplash.com/photo-1494337480532-3725c85fd2ab?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    artist: "Ornella Binni",
-    art: "https://images.unsplash.com/photo-1465869185982-5a1a7522cbcb?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    artist: "Tom Byrom",
-    art: "https://images.unsplash.com/photo-1548516173-3cabfa4607e9?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    artist: "Vladimir Malyavko",
-    art: "https://images.unsplash.com/photo-1494337480532-3725c85fd2ab?auto=format&fit=crop&w=300&q=80",
-  },
-];
+
 
 const BookSuggestion: React.FC = () => {
+  const [suggestion, setSuggestions] = useState<
+  {
+    image: string;
+    author: string;
+  }[]>([])
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/topchoices").then((res) => {
+      setSuggestions(res.data);
+    });
+  }, []);
+
   return (
     <div className="w-full  gap-4 p-4">
       <div className="">
@@ -50,13 +35,13 @@ const BookSuggestion: React.FC = () => {
         navigation
         className="py-16 mb-16"
       >
-        {works.map((work, index) => (
+        {suggestion.map((suggestion, index) => (
           <SwiperSlide key={index}>
             <div>
               <img
-                src={work.art}
+                src={suggestion.image}
                 style={{ filter: "grayscale(50%)", transition: "filter 0.3s" }}
-                alt={work.artist}
+                alt={suggestion.author}
                 className="h-64 object-cover rounded-lg"
                 onMouseOver={(e) =>
                   (e.currentTarget.style.filter =
@@ -66,7 +51,7 @@ const BookSuggestion: React.FC = () => {
                   (e.currentTarget.style.filter = "grayscale(50%)")
                 }
               />
-              <p>{work.artist}</p>
+              <p>{suggestion.author}</p>
             </div>
           </SwiperSlide>
         ))}

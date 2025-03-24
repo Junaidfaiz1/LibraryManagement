@@ -117,14 +117,14 @@ const DashboardUser = () => {
       <TableFooter>
         <TableRow>
           <TableCell
-            colSpan={4}
+            colSpan={5}
             className="text-right bg-white dark:bg-neutral-500"
           >
             <a
               href="/"
               className={buttonVariants({ variant: "ghost", size: "sm" })}
             >
-              <p className="text-custompink">See All</p>
+              <p className="text-custompink ">See All</p>
             </a>
           </TableCell>
         </TableRow>
