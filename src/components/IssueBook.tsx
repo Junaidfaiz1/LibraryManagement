@@ -36,6 +36,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Toast } from "./ToastMessage";
 
 const IssueBook = () => {
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState<
     {
       _id: string;
@@ -43,15 +44,12 @@ const IssueBook = () => {
     }[]
   >([]);
 
-  console.log("User >>>", user);
-
   const [book, setBook] = useState<
     {
       _id: string;
       title: string;
     }[]
   >([]);
-  console.log("Book >>>", book);
 
   const [issueDate, setIssueDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
@@ -59,13 +57,10 @@ const IssueBook = () => {
   const [formdata, setFormData] = useState<{
     userId: string;
     bookId: string;
-  
   }>({
     userId: "",
     bookId: "",
-    
   });
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,10 +94,7 @@ const IssueBook = () => {
       ...formdata,
       issueDate: issueDate.toISOString(),
       returnDate: returnDate.toISOString(),
-    }
-    console.log("Payload >>>", payload);
-
-   
+    };
 
     try {
       const res = await axios.post(
@@ -111,6 +103,8 @@ const IssueBook = () => {
       );
       if (res.status === 200) {
         Toast.success("Book issued successfully");
+     
+        setOpen(false);
       } else {
         Toast.error("Error in issuing book");
       }
@@ -120,7 +114,7 @@ const IssueBook = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}> 
       <DialogTrigger asChild>
         <Button variant="outline">Issue Book</Button>
       </DialogTrigger>

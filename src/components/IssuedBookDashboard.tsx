@@ -21,35 +21,35 @@ import { NotebookPen } from "lucide-react";
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import IssueBook from "./IssueBook";
-
-const invoices = [
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import { useState, useEffect } from "react";
+import { Toast } from "./ToastMessage";
+import axios from "axios";
 
 const IssuedBookDashboard = () => {
+  const [issuedBook, setIssuedBook] = useState<
+    {
+      bookTitle: string;
+      issueDate: string;
+      returnDate: string;
+      userName: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    try {
+      const fetchIssuedBooks = async () => {
+        const response = await axios.get(
+          "http://localhost:3000/api/getissuedbooks"
+        );
+        setIssuedBook(response.data);
+       
+      };
+      fetchIssuedBooks();
+    } catch (error) {
+      Toast.error("Error fetching issued books:");
+    }
+  }, []);
+
   return (
     <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col">
       <div className="flex justify-between items-center p-4">
@@ -64,21 +64,21 @@ const IssuedBookDashboard = () => {
         <TableHeader>
           <TableRow className="h-12 ">
             <TableHead className="text-left">Book Name</TableHead>
-            <TableHead className="text-left">Issued Date</TableHead>
+            <TableHead>Taken By</TableHead>
+            <TableHead>Issued Date</TableHead>
             <TableHead>Return Date</TableHead>
-
             <TableHead className="text-right">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow className="h-12 " key={invoice.invoice}>
+          {issuedBook.map((book, index) => (
+            <TableRow className="h-12 " key={index}>
               <TableCell className="text-left font-medium">
-                {invoice.invoice}
+                {book.bookTitle}
               </TableCell>
-
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+              <TableCell>{book.userName}</TableCell>
+              <TableCell>{book.issueDate}</TableCell>
+              <TableCell>{book.returnDate}</TableCell>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
