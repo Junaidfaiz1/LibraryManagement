@@ -13,7 +13,7 @@ import ModeToggle from "./mode-toggle";
 
 export function Navbar() {
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="border-b bg-background/95 dark:bg-gray-800  backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center px-4">
         {/* Logo & Brand */}
         <div className="flex items-center gap-2">
