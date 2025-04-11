@@ -29,35 +29,40 @@ import {
 import { NotebookPen } from "lucide-react";
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
+import {useState, useEffect} from "react"
+import axios from "axios";
 
-const invoices = [
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
 
 const DashboardUser = () => {
+  const [overdueBook, setOverdueBook] = useState<
+    {
+      id: string;
+      bookTitle: string;
+      author: string;
+      status: string;
+      overdue: string;
+      userName: string;
+    }[]
+  >([]);
+
+
+  useEffect(() => {
+    try {
+      const fetchOverdueBooks = async () => {
+        const response = await axios.get(
+          "http://localhost:3000/api/overduebooks"
+        );
+        const data = await response.data;
+        setOverdueBook(data);
+      };
+      fetchOverdueBooks();
+    } catch (error) {
+      console.error("Error fetching overdue books:", error);
+    }
+  }, []);
+  console.log(overdueBook);
+
+
   return (
     <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col mt-10">
       <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700  p-4">
@@ -75,15 +80,15 @@ const DashboardUser = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow className="h-12 " key={invoice.invoice}>
+          {overdueBook.map((books, index) => (
+            <TableRow className="h-12 " key={index}>
               <TableCell className="text-left font-medium">
-                {invoice.invoice}
+                {books.userName}
               </TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+              <TableCell>{books.bookTitle}</TableCell>
+              <TableCell>{books.author}</TableCell>
+              <TableCell>{books.overdue}</TableCell>
+              <TableCell>{books.status}</TableCell>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -96,13 +101,13 @@ const DashboardUser = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      Edit Book Information
+                    Overdue Paid
                       <DropdownMenuShortcut>
                         <NotebookPen />
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      Remove Book
+                    Overdue Unpaid
                       <DropdownMenuShortcut>
                         <BookX />
                       </DropdownMenuShortcut>

@@ -28,12 +28,15 @@ import axios from "axios";
 const IssuedBookDashboard = () => {
   const [issuedBook, setIssuedBook] = useState<
     {
+      id: string;
       bookTitle: string;
       issueDate: string;
       returnDate: string;
       userName: string;
     }[]
   >([]);
+
+  
 
   useEffect(() => {
     try {
@@ -42,13 +45,31 @@ const IssuedBookDashboard = () => {
           "http://localhost:3000/api/getissuedbooks"
         );
         setIssuedBook(response.data);
-       
       };
       fetchIssuedBooks();
     } catch (error) {
       Toast.error("Error fetching issued books:");
     }
   }, []);
+
+  const HandleReturn = async (id: string) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/returnbook/${id}`
+      );
+      if (response.status === 200) {
+        Toast.success("Book returned successfully!");
+        setIssuedBook((prevBooks) =>
+          prevBooks.filter((book) => book.id !== id)
+        );
+      } else {
+        Toast.error("Error returning the book!");
+      }
+    } catch (error) {
+      console.error("Error returning the book:", error);
+      Toast.error("Error returning the book!");
+    }
+  };
 
   return (
     <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col">
@@ -97,7 +118,13 @@ const IssuedBookDashboard = () => {
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      Remove Book
+                      <button
+                        type="button"
+                        onClick={() => HandleReturn(book.id)}
+                      >
+                        Book Returned
+                      </button>
+
                       <DropdownMenuShortcut>
                         <BookX />
                       </DropdownMenuShortcut>
