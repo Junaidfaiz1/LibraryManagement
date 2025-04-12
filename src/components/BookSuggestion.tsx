@@ -23,7 +23,7 @@ const BookSuggestion: React.FC = () => {
   return (
     <div className="w-full  gap-4 p-4">
       <div className="">
-        <h1 className="text-2xl font-medium dark:text-white">Top Choices</h1>
+        <h1 className="text-2xl font-medium dark:text-white">Famous Books</h1>
       </div>
       <Swiper
         modules={[Navigation, Autoplay]}

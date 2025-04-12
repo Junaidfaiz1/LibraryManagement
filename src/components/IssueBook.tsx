@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 
 import { Toast } from "./ToastMessage";
 
-const IssueBook = () => {
+const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<
     {
@@ -102,19 +102,27 @@ const IssueBook = () => {
         payload
       );
       if (res.status === 200) {
+        fetchIssuedBooks();
         Toast.success("Book issued successfully");
-     
+        setIssueDate(undefined);
+        setReturnDate(undefined);
+        setFormData({ userId: "", bookId: "" });
+
         setOpen(false);
       } else {
-        Toast.error("Error in issuing book");
+        
       }
     } catch (error) {
-      Toast.error("Error in issuing book");
+      if (axios.isAxiosError(error) && error.response) {
+        Toast.error(error.response.data.error);
+      } else {
+        Toast.error("An unexpected error occurred");
+      }
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}> 
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Issue Book</Button>
       </DialogTrigger>
@@ -139,7 +147,7 @@ const IssueBook = () => {
               {user.map((u, index) => (
                 <SelectContent key={index}>
                   <SelectGroup>
-                    <SelectItem value={u._id} key={index}>
+                    <SelectItem key={index} value={u._id} >
                       {u.name}
                     </SelectItem>
                   </SelectGroup>

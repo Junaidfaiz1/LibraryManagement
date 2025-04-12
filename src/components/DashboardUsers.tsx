@@ -38,11 +38,15 @@ const DashboardUser = () => {
     }[]
   >([]);
 
+  const fetchUsers = async () => {
+    axios.get("http://localhost:3000/api/userdashboard").then((res) => {
+      setUsers(res.data);
+    });
+  };
+
   useEffect(() => {
     try {
-      axios.get("http://localhost:3000/api/userdashboard").then((res) => {
-        setUsers(res.data);
-      });
+      fetchUsers();
     } catch (error) {
       toast.error("Error in fetching data");
     }

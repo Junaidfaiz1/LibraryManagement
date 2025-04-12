@@ -37,15 +37,16 @@ const IssuedBookDashboard = () => {
   >([]);
 
   
+  const fetchIssuedBooks = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/api/getissuedbooks"
+    );
+    setIssuedBook(response.data);
+  };
 
   useEffect(() => {
     try {
-      const fetchIssuedBooks = async () => {
-        const response = await axios.get(
-          "http://localhost:3000/api/getissuedbooks"
-        );
-        setIssuedBook(response.data);
-      };
+      
       fetchIssuedBooks();
     } catch (error) {
       Toast.error("Error fetching issued books:");
@@ -78,10 +79,16 @@ const IssuedBookDashboard = () => {
           Issue Book
         </h1>
         <div>
-          <IssueBook />
+          <IssueBook fetchIssuedBooks= {fetchIssuedBooks} />
         </div>
       </div>
-      <Table className="w-full">
+      {!issuedBook.length ? (
+        <div className="flex justify-center items-center h-40">
+          <NotebookPen className="h-10 w-10 text-gray-500" />
+          <p className="text-gray-500">No Issued Books</p>
+        </div>
+      ) : (
+        <Table className="w-full">
         <TableHeader>
           <TableRow className="h-12 ">
             <TableHead className="text-left">Book Name</TableHead>
@@ -112,12 +119,6 @@ const IssuedBookDashboard = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      Edit Book Information
-                      <DropdownMenuShortcut>
-                        <NotebookPen />
-                      </DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
                       <button
                         type="button"
                         onClick={() => HandleReturn(book.id)}
@@ -135,7 +136,8 @@ const IssuedBookDashboard = () => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table>)}
+      
     </div>
   );
 };

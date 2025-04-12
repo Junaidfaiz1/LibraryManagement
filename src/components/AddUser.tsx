@@ -41,7 +41,7 @@ const AddUser = () => {
       Toast.error("Please fill all the fields");
       return;
     }
-    console.log(formdata);
+    
     try {
       const res = await axios.post("http://localhost:3000/api/register", {
         name: formdata.name,
@@ -59,11 +59,14 @@ const AddUser = () => {
           registration: "",
           password: "",
         });
-      } else {
-        Toast.error(res.data.error);
-      }
+      } 
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error) && error.response) {
+        Toast.error(error.response.data.error);
+      } else {
+        Toast.error("An unexpected error occurred");
+      }
+    
     }
   };
 

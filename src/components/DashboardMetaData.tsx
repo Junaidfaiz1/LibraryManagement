@@ -1,4 +1,4 @@
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { Users } from "lucide-react";
 import { UserPlus } from "lucide-react";
 import { Hourglass } from "lucide-react";
@@ -8,10 +8,32 @@ import { useState } from "react";
 
 const DashboardMetaData: React.FC = () => {
   const [newMemvers, setNewMembers] = useState<number>(0);
+  const [issuedBooks, setIssuedBooks] = useState<number>(0);
+  const [totalUsers, setTotalUsers] = useState<number>(0);
+  const [overdueBooks, setOverdueBooks] = useState<number>(0);
 
+  console.log("...>>>", totalUsers);
   useEffect(() => {
     axios.get("http://localhost:3000/api/newmembers").then((res) => {
       setNewMembers(res.data.members);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/totalissuedbooks").then((res) => {
+      setIssuedBooks(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/usercount").then((res) => {
+      setTotalUsers(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/totaloverduebooks").then((res) => {
+      setOverdueBooks(res.data);
     });
   }, []);
 
@@ -21,10 +43,10 @@ const DashboardMetaData: React.FC = () => {
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
-              1250
+              {totalUsers}
             </h1>
             <p className="text-sm sm:text-base text-gray-700 dark:text-white mt-2">
-              Total Visitors
+              Total Students
             </p>
           </div>
           <div className="flex items-start justify-center">
@@ -39,7 +61,7 @@ const DashboardMetaData: React.FC = () => {
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
-              723
+              {issuedBooks}
             </h1>
             <p className="text-sm sm:text-base text-gray-700 dark:text-white mt-2">
               Borrowed Books
@@ -60,7 +82,7 @@ const DashboardMetaData: React.FC = () => {
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-col flex-1 items-start">
             <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
-              50
+              {overdueBooks}
             </h1>
             <p className="text-sm sm:text-base text-gray-700 dark:text-white mt-2">
               Overdue Books

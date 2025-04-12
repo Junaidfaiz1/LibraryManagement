@@ -59,7 +59,7 @@ const AddBook = () => {
         quantity: formdata.Quantity,
         author: formdata.Author,
       });
-      console.log(res);
+      
       if (res.status === 200) {
         setFormdata({
           name: "",
@@ -72,8 +72,15 @@ const AddBook = () => {
         Toast.error(res.data.error);
       }
     } catch (error) {
-      Toast.error("An error occurred while adding the book.");
-      console.error(error);
+      if (axios.isAxiosError(error) && error.response?.status === 413) {
+        Toast.error("Image size is too large. Please upload a smaller image.");
+      }
+      if (axios.isAxiosError(error)) {
+        Toast.error(error.response?.data?.error);
+      } else {
+        Toast.error("An unexpected error occurred");
+      }
+     
     }
   };
 

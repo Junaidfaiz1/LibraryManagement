@@ -36,10 +36,15 @@ const DashboardUser = () => {
       image: string;
     }[]
   >([]);
+
+const fetchBooks = async () => {
+  axios.get("http://localhost:3000/api/bookdashboard").then((res) => {
+    setBooks(res.data);
+  });
+}
+
   useEffect(() => {
-    axios.get("http://localhost:3000/api/bookdashboard").then((res) => {
-      setBooks(res.data);
-    });
+    fetchBooks()
   }, []);
 
   const HandleRemove = async (id: number) => {
@@ -48,6 +53,7 @@ const DashboardUser = () => {
         `http://localhost:3000/api/deletebook/${id}`
       );
       if (res.status === 200) {
+        fetchBooks();
         setBooks(() => res.data);
       }
     } catch (error) {
@@ -83,12 +89,7 @@ const DashboardUser = () => {
                 <DropdownMenuLabel>{book.title}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  {/* <DropdownMenuItem>
-                    Edit Book Information
-                    <DropdownMenuShortcut>
-                      <NotebookPen />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem> */}
+                
                   <DropdownMenuItem>
                     <button
                       onClick={() => {
