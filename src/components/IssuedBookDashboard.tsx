@@ -8,6 +8,15 @@ import {
 } from "@/components/ui/table";
 
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -26,6 +35,9 @@ import { Toast } from "./ToastMessage";
 import axios from "axios";
 
 const IssuedBookDashboard = () => {
+  const [pages, setPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  console.log(pages, currentPage);
   const [issuedBook, setIssuedBook] = useState<
     {
       id: string;
@@ -33,25 +45,28 @@ const IssuedBookDashboard = () => {
       issueDate: string;
       returnDate: string;
       userName: string;
+      currentPage: number;
+      pages: number;
     }[]
   >([]);
+  console.log(issuedBook);
 
-  
   const fetchIssuedBooks = async () => {
     const response = await axios.get(
-      "http://localhost:3000/api/getissuedbooks"
+      `http://localhost:3000/api/getissuedbooks?page=${currentPage}`
     );
-    setIssuedBook(response.data);
+    setIssuedBook(response.data.formattedData);
+    setPages(response.data.pages);
+    setCurrentPage(response.data.currentPage);
   };
 
   useEffect(() => {
     try {
-      
       fetchIssuedBooks();
     } catch (error) {
       Toast.error("Error fetching issued books:");
     }
-  }, []);
+  }, [currentPage]);
 
   const HandleReturn = async (id: string) => {
     try {
@@ -79,7 +94,7 @@ const IssuedBookDashboard = () => {
           Issue Book
         </h1>
         <div>
-          <IssueBook fetchIssuedBooks= {fetchIssuedBooks} />
+          <IssueBook fetchIssuedBooks={fetchIssuedBooks} />
         </div>
       </div>
       {!issuedBook.length ? (
@@ -89,55 +104,101 @@ const IssuedBookDashboard = () => {
         </div>
       ) : (
         <Table className="w-full">
-        <TableHeader>
-          <TableRow className="h-12 ">
-            <TableHead className="text-left">Book Name</TableHead>
-            <TableHead>Taken By</TableHead>
-            <TableHead>Issued Date</TableHead>
-            <TableHead>Return Date</TableHead>
-            <TableHead className="text-right">Details</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {issuedBook.map((book, index) => (
-            <TableRow className="h-12 " key={index}>
-              <TableCell className="text-left font-medium">
-                {book.bookTitle}
-              </TableCell>
-              <TableCell>{book.userName}</TableCell>
-              <TableCell>{book.issueDate}</TableCell>
-              <TableCell>{book.returnDate}</TableCell>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <TableCell className="float-right mr-3">
-                    <Ellipsis />
-                  </TableCell>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Book Name</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <button
-                        type="button"
-                        onClick={() => HandleReturn(book.id)}
-                      >
-                        Book Returned
-                      </button>
-
-                      <DropdownMenuShortcut>
-                        <BookX />
-                      </DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+          <TableHeader>
+            <TableRow className="h-12 ">
+              <TableHead className="text-left">Book Name</TableHead>
+              <TableHead>Taken By</TableHead>
+              <TableHead>Issued Date</TableHead>
+              <TableHead>Return Date</TableHead>
+              <TableHead className="text-right">Details</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>)}
-      
+          </TableHeader>
+          <TableBody>
+            {issuedBook.map((book, index) => (
+              <TableRow className="h-12 " key={index}>
+                <TableCell className="text-left font-medium">
+                  {book.bookTitle}
+                </TableCell>
+                <TableCell>{book.userName}</TableCell>
+                <TableCell>{book.issueDate}</TableCell>
+                <TableCell>{book.returnDate}</TableCell>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TableCell className="float-right mr-3">
+                      <Ellipsis />
+                    </TableCell>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Book Name</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        <button
+                          type="button"
+                          onClick={() => HandleReturn(book.id)}
+                        >
+                          Book Returned
+                        </button>
+
+                        <DropdownMenuShortcut>
+                          <BookX />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+      <div>
+        <Pagination className="flex justify-end mt-1 mb-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage((prev) => prev - 1);
+                    
+                  }
+                }}
+              />
+            </PaginationItem>
+
+            {Array.from({ length: pages }, (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  className={
+                    currentPage === index + 1
+                      ? "bg-custompink dark:bg-custompink"
+                      : ""
+                  }
+                  isActive={currentPage === index + 1}
+                  onClick={() => {
+                    setCurrentPage(index + 1);
+                    
+                  }}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => {
+                  if (currentPage < pages) {
+                    setCurrentPage((prev) => prev + 1);
+                    
+                  }
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
     </div>
   );
 };

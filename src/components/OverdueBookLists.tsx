@@ -105,7 +105,7 @@ const DashboardUser = () => {
               <TableHead className="text-left">User Name</TableHead>
               <TableHead className="text-left">Book Name</TableHead>
               <TableHead>Author</TableHead>
-              <TableHead>Overdue</TableHead>
+              <TableHead>Dues</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>

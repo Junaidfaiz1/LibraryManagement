@@ -12,7 +12,7 @@ const DashboardMetaData: React.FC = () => {
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [overdueBooks, setOverdueBooks] = useState<number>(0);
 
-  console.log("...>>>", totalUsers);
+
   useEffect(() => {
     axios.get("http://localhost:3000/api/newmembers").then((res) => {
       setNewMembers(res.data.members);

@@ -144,15 +144,17 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Select a User" />
               </SelectTrigger>
-              {user.map((u, index) => (
-                <SelectContent key={index}>
+              
+                <SelectContent >
+                {user.map((u, index) => (
                   <SelectGroup>
                     <SelectItem key={index} value={u._id} >
                       {u.name}
                     </SelectItem>
                   </SelectGroup>
+                    ))}
                 </SelectContent>
-              ))}
+            
             </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
