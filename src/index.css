@@ -122,10 +122,6 @@
 }
 
 
-.dark body{
- @apply bg-stone-950
- @apply text-white
-}
 
 @layer base {
   * {

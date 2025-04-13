@@ -2,11 +2,11 @@
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
 
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-}
+} */
 
 body {
   background-color: rgb(249, 249, 249);

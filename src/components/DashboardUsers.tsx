@@ -32,6 +32,7 @@ import { Ellipsis } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { DELETE_USER_API, USERS_API } from "@/apiRoute";
 
 const DashboardUser = () => {
   const [users, setUsers] = useState<
@@ -50,7 +51,7 @@ const DashboardUser = () => {
 
   const fetchUsers = async () => {
     axios
-      .get("http://localhost:3000/api/userdashboard?page=" + currentPage)
+      .get(`${USERS_API}?page=` + currentPage)
       .then((res) => {
         setUsers(res.data.users);
         setPage(res.data.page);
@@ -69,7 +70,7 @@ const DashboardUser = () => {
   const Handlesubmit = async (id: number) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/deleteuser/${id}`
+        `${DELETE_USER_API}/${id}`
       );
       if (res.status === 200) {
         setUsers(() => res.data);

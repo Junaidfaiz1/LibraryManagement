@@ -7,8 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { Navbar } from "./components/Navbar";
 function App() {
   return (
-
-    <div>  
+    <div className="dark:bg-stone-950 dark:text-white bg-gray-100 text-black">
       <ToastContainer />
       <Navbar />
       <DashboardMetaData />

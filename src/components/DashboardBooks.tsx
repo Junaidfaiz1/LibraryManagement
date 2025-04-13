@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  
   TableHead,
   TableHeader,
   TableRow,
@@ -31,9 +30,9 @@ import {
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 
-
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BOOKS_DASHBOARD_API, DELETE_BOOK_API } from "@/apiRoute.ts";
 
 const DashboardUser = () => {
   const [page, setPage] = useState<number>(0);
@@ -52,13 +51,11 @@ const DashboardUser = () => {
   console.log(page);
 
   const fetchBooks = async () => {
-    axios
-      .get("http://localhost:3000/api/bookdashboard?page=" + currentPage)
-      .then((res) => {
-        setBooks(res.data.books);
-        setPage(res.data.pages);
-        setCurrentPage(res.data.currentPage);
-      });
+    axios.get(`${BOOKS_DASHBOARD_API}?page=${currentPage}`).then((res) => {
+      setBooks(res.data.books);
+      setPage(res.data.pages);
+      setCurrentPage(res.data.currentPage);
+    });
   };
 
   useEffect(() => {
@@ -68,7 +65,7 @@ const DashboardUser = () => {
   const HandleRemove = async (id: number) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/deletebook/${id}`
+        `${DELETE_BOOK_API}/${id}`
       );
       if (res.status === 200) {
         fetchBooks();

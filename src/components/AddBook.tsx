@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRef, useState } from "react";
 import ImagePoster from "@/assets/TCgR7rV1SqCxtjpJwfrGQg.jpeg";
+import { ADD_BOOKS_API } from "@/apiRoute";
 
 const AddBook = () => {
   const imgref = useRef<HTMLInputElement>(null);
@@ -49,17 +50,19 @@ const AddBook = () => {
     }
   };
 
+  console.log("add books", import.meta.env.BASE_URL);
+
   const HandelSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3000/api/addbook", {
+      const res = await axios.post(ADD_BOOKS_API, {
         title: formdata.name,
         image: formdata.image,
         quantity: formdata.Quantity,
         author: formdata.Author,
       });
-      
+
       if (res.status === 200) {
         setFormdata({
           name: "",
@@ -80,7 +83,6 @@ const AddBook = () => {
       } else {
         Toast.error("An unexpected error occurred");
       }
-     
     }
   };
 
@@ -118,7 +120,7 @@ const AddBook = () => {
               Author
             </Label>
             <Input
-            value={formdata.Author}
+              value={formdata.Author}
               id="Author"
               onChange={(e) => {
                 setFormdata({ ...formdata, Author: e.target.value });
@@ -132,7 +134,7 @@ const AddBook = () => {
               Quantity
             </Label>
             <Input
-            value={formdata.Quantity}
+              value={formdata.Quantity}
               id="Quantity"
               onChange={(e) => {
                 setFormdata({
@@ -149,7 +151,6 @@ const AddBook = () => {
               Image
             </Label>
             <Input
-          
               id="Image"
               type="file"
               ref={imgref}

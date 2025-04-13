@@ -5,6 +5,7 @@ import { Hourglass } from "lucide-react";
 import { BookOpenCheck } from "lucide-react";
 import axios from "axios";
 import { useState } from "react";
+import { NEW_MEMBERS_API, STUDENT_COUNT_API, TOTAL_ISSUED_BOOKS_API, TOTAL_OVERDUE_BOOKS_API } from "@/apiRoute";
 
 const DashboardMetaData: React.FC = () => {
   const [newMemvers, setNewMembers] = useState<number>(0);
@@ -14,25 +15,25 @@ const DashboardMetaData: React.FC = () => {
 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/newmembers").then((res) => {
+    axios.get(NEW_MEMBERS_API).then((res) => {
       setNewMembers(res.data.members);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/totalissuedbooks").then((res) => {
+    axios.get(TOTAL_ISSUED_BOOKS_API).then((res) => {
       setIssuedBooks(res.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/usercount").then((res) => {
+    axios.get(STUDENT_COUNT_API).then((res) => {
       setTotalUsers(res.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/totaloverduebooks").then((res) => {
+    axios.get(TOTAL_OVERDUE_BOOKS_API).then((res) => {
       setOverdueBooks(res.data);
     });
   }, []);

@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 
 import { Toast } from "./ToastMessage";
+import { BOOK_NAMES_API, ISSUE_BOOK_API, STUDENT_NAMES_API } from "@/apiRoute";
 
 const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
   const [open, setOpen] = useState(false);
@@ -65,9 +66,9 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/usernames");
+        const res = await axios.get(STUDENT_NAMES_API);
         setUser(res.data);
-        const res1 = await axios.get("http://localhost:3000/api/booknames");
+        const res1 = await axios.get(BOOK_NAMES_API);
         setBook(res1.data);
       } catch (error) {
         Toast.error("Error in fetching data");
@@ -98,7 +99,7 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/issuebook",
+        ISSUE_BOOK_API,
         payload
       );
       if (res.status === 200) {

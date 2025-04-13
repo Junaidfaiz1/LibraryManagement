@@ -30,6 +30,7 @@ import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { OVERDUE_BOOK_API, OVERDUE_PAID_API, RETURN_BOOK_API } from "@/apiRoute";
 
 const DashboardUser = () => {
   const [pages, setPages] = useState<number>(0);
@@ -48,7 +49,7 @@ const DashboardUser = () => {
 
   const fetchOverdueBooks = async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/overduebooks?page=${currentPage}`
+      `${OVERDUE_BOOK_API}?page=${currentPage}`
     );
     const data = await response.data;
     setOverdueBook(data.formattedData);
@@ -67,7 +68,7 @@ const DashboardUser = () => {
   const HandleReturn = async (id: string) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/returnbook/${id}`
+        `${RETURN_BOOK_API}/${id}`
       );
       if (response.status === 200) {
         fetchOverdueBooks();
@@ -82,7 +83,7 @@ const DashboardUser = () => {
   const HandlePaid = async (id: string) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/overduepaid/${id}`
+        `${OVERDUE_PAID_API}/${id}`
       );
       if (response.status === 200) {
         fetchOverdueBooks();

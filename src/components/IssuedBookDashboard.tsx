@@ -33,6 +33,7 @@ import IssueBook from "./IssueBook";
 import { useState, useEffect } from "react";
 import { Toast } from "./ToastMessage";
 import axios from "axios";
+import { Get_ISSUED_BOOKS_API, RETURN_BOOK_API } from "@/apiRoute";
 
 const IssuedBookDashboard = () => {
   const [pages, setPages] = useState<number>(0);
@@ -52,7 +53,7 @@ const IssuedBookDashboard = () => {
 
   const fetchIssuedBooks = async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/getissuedbooks?page=${currentPage}`
+      `${Get_ISSUED_BOOKS_API}?page=${currentPage}`
     );
     setIssuedBook(response.data.formattedData);
     setPages(response.data.pages);
@@ -70,7 +71,7 @@ const IssuedBookDashboard = () => {
   const HandleReturn = async (id: string) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/returnbook/${id}`
+        `${RETURN_BOOK_API}/${id}`
       );
       if (response.status === 200) {
         Toast.success("Book returned successfully!");

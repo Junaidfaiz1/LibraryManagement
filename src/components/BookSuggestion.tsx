@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { TOP_CHOICES_API } from "@/apiRoute";
 
 const BookSuggestion: React.FC = () => {
   const [suggestion, setSuggestions] = useState<
@@ -13,7 +14,7 @@ const BookSuggestion: React.FC = () => {
   >([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/topchoices").then((res) => {
+    axios.get(TOP_CHOICES_API).then((res) => {
       setSuggestions(res.data);
     });
   }, []);

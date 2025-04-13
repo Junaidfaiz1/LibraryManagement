@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useState } from "react";
 import { Toast } from "./ToastMessage";
+import { REGISTER_USER_API } from "@/apiRoute";
+
 
 const AddUser = () => {
   const [formdata, setFormdata] = useState<{
@@ -41,9 +43,9 @@ const AddUser = () => {
       Toast.error("Please fill all the fields");
       return;
     }
-    
+
     try {
-      const res = await axios.post("http://localhost:3000/api/register", {
+      const res = await axios.post(REGISTER_USER_API, {
         name: formdata.name,
         email: formdata.email,
         rnumber: formdata.registration,
@@ -59,14 +61,13 @@ const AddUser = () => {
           registration: "",
           password: "",
         });
-      } 
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         Toast.error(error.response.data.error);
       } else {
         Toast.error("An unexpected error occurred");
       }
-    
     }
   };
 
@@ -104,7 +105,7 @@ const AddUser = () => {
               Email
             </Label>
             <Input
-            value={formdata.email}
+              value={formdata.email}
               id="Email"
               onChange={(e) => {
                 setFormdata({ ...formdata, email: e.target.value });
@@ -118,7 +119,7 @@ const AddUser = () => {
               Registration Number
             </Label>
             <Input
-            value={formdata.registration}
+              value={formdata.registration}
               id="Registration"
               onChange={(e) => {
                 setFormdata({ ...formdata, registration: e.target.value });
@@ -132,7 +133,7 @@ const AddUser = () => {
               Department
             </Label>
             <Input
-            value={formdata.department}
+              value={formdata.department}
               id="Department"
               onChange={(e) => {
                 setFormdata({ ...formdata, department: e.target.value });
@@ -146,7 +147,7 @@ const AddUser = () => {
               Password
             </Label>
             <Input
-            value={formdata.password}
+              value={formdata.password}
               id="Password"
               onChange={(e) => {
                 setFormdata({ ...formdata, password: e.target.value });
