@@ -9,7 +9,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -33,6 +32,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const DashboardUser = () => {
+  const [pages, setPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
   const [overdueBook, setOverdueBook] = useState<
     {
       id: string;
@@ -45,9 +47,13 @@ const DashboardUser = () => {
   >([]);
 
   const fetchOverdueBooks = async () => {
-    const response = await axios.get("http://localhost:3000/api/overduebooks");
+    const response = await axios.get(
+      `http://localhost:3000/api/overduebooks?page=${currentPage}`
+    );
     const data = await response.data;
-    setOverdueBook(data);
+    setOverdueBook(data.formattedData);
+    setPages(data.pages);
+    setCurrentPage(data.currentPage);
   };
 
   useEffect(() => {
@@ -56,7 +62,7 @@ const DashboardUser = () => {
     } catch (error) {
       console.error("Error fetching overdue books:", error);
     }
-  }, []);
+  }, [currentPage]);
 
   const HandleReturn = async (id: string) => {
     try {
@@ -164,34 +170,51 @@ const DashboardUser = () => {
       )}
 
       <div>
-        <Pagination className="flex justify-end mt-4">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                className="bg-custompink dark:bg-custompink"
-                isActive
-              >
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        {pages <= 1 ? null : (
+          <Pagination className="flex justify-end mt-1 mb-4">
+            <PaginationContent>
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => {
+                      if (currentPage > 1) {
+                        setCurrentPage((prev) => prev - 1);
+                      }
+                    }}
+                  />
+                </PaginationItem>
+              )}
+              {Array.from({ length: pages }, (_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={currentPage === index + 1}
+                    onClick={() => {
+                      setCurrentPage((prev) => prev + 1);
+                    }}
+                    className={
+                      currentPage === index + 1
+                        ? "bg-custompink dark:bg-custompink"
+                        : ""
+                    }
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => {
+                    if (currentPage < pages) {
+                      const next = currentPage + 1;
+                      setCurrentPage(next);
+                    }
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

@@ -2,11 +2,20 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
+  
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import {
   DropdownMenu,
@@ -21,12 +30,14 @@ import {
 // import { NotebookPen } from "lucide-react";
 import { BookX } from "lucide-react";
 import { Ellipsis } from "lucide-react";
-import { buttonVariants } from "./ui/button";
+
 
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const DashboardUser = () => {
+  const [page, setPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [books, setBooks] = useState<
     {
       _id: number;
@@ -36,16 +47,23 @@ const DashboardUser = () => {
       image: string;
     }[]
   >([]);
+  console.log(books);
+  console.log(currentPage);
+  console.log(page);
 
-const fetchBooks = async () => {
-  axios.get("http://localhost:3000/api/bookdashboard").then((res) => {
-    setBooks(res.data);
-  });
-}
+  const fetchBooks = async () => {
+    axios
+      .get("http://localhost:3000/api/bookdashboard?page=" + currentPage)
+      .then((res) => {
+        setBooks(res.data.books);
+        setPage(res.data.pages);
+        setCurrentPage(res.data.currentPage);
+      });
+  };
 
   useEffect(() => {
-    fetchBooks()
-  }, []);
+    fetchBooks();
+  }, [currentPage]);
 
   const HandleRemove = async (id: number) => {
     try {
@@ -62,68 +80,99 @@ const fetchBooks = async () => {
   };
 
   return (
-    <Table className="">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-left">Book Name</TableHead>
-          <TableHead className="text-center">Author</TableHead>
-          <TableHead className="text-center">Available</TableHead>
-          <TableHead className="text-right">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {books.map((book, index) => (
-          <TableRow key={index} className="h-12">
-            <TableCell className="text-left font-medium">
-              {book.title}
-            </TableCell>
-            <TableCell className="text-center">{book.author}</TableCell>
-            <TableCell className="text-center">{book.quantity}</TableCell>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <TableCell className="float-right mr-3">
-                  <Ellipsis />
-                </TableCell>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>{book.title}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                
-                  <DropdownMenuItem>
-                    <button
-                      onClick={() => {
-                        HandleRemove(book._id);
-                      }}
-                    >
-                      Remove Book
-                    </button>
-                    <DropdownMenuShortcut>
-                      <BookX />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+    <>
+      <Table className="">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left">Book Name</TableHead>
+            <TableHead className="text-center">Author</TableHead>
+            <TableHead className="text-center">Available</TableHead>
+            <TableHead className="text-right">Action</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell
-            colSpan={4}
-            className="text-right  bg-white dark:bg-neutral-500"
-          >
-            <a
-              href="/"
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              <p className="text-custompink">See All</p>
-            </a>
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {books.map((book, index) => (
+            <TableRow key={index} className="h-12">
+              <TableCell className="text-left font-medium">
+                {book.title}
+              </TableCell>
+              <TableCell className="text-center">{book.author}</TableCell>
+              <TableCell className="text-center">{book.quantity}</TableCell>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <TableCell className="float-right mr-3">
+                    <Ellipsis />
+                  </TableCell>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>{book.title}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <button
+                        onClick={() => {
+                          HandleRemove(book._id);
+                        }}
+                      >
+                        Remove Book
+                      </button>
+                      <DropdownMenuShortcut>
+                        <BookX />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div>
+        <Pagination className="flex justify-end mt-1 mb-4">
+          <PaginationContent>
+            {currentPage > 1 && (
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => {
+                    if (currentPage > 1) {
+                      setCurrentPage((prev) => prev - 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+            )}
+            {Array.from({ length: page }, (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={currentPage === index + 1}
+                  onClick={() => {
+                    setCurrentPage((prev) => prev + 1);
+                  }}
+                  className={
+                    currentPage === index + 1
+                      ? "bg-custompink dark:bg-custompink"
+                      : ""
+                  }
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => {
+                  if (currentPage < page) {
+                    const next = currentPage + 1;
+                    setCurrentPage(next);
+                  }
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+    </>
   );
 };
 

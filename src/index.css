@@ -121,6 +121,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+
+.dark body{
+ @apply bg-stone-950
+ @apply text-white
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

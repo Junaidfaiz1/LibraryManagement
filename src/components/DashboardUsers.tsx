@@ -2,11 +2,19 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import {
   DropdownMenu,
@@ -21,7 +29,6 @@ import {
 import { UserRoundX } from "lucide-react";
 import { UserPen } from "lucide-react";
 import { Ellipsis } from "lucide-react";
-import { buttonVariants } from "./ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -38,10 +45,17 @@ const DashboardUser = () => {
     }[]
   >([]);
 
+  const [page, setPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
   const fetchUsers = async () => {
-    axios.get("http://localhost:3000/api/userdashboard").then((res) => {
-      setUsers(res.data);
-    });
+    axios
+      .get("http://localhost:3000/api/userdashboard?page=" + currentPage)
+      .then((res) => {
+        setUsers(res.data.users);
+        setPage(res.data.page);
+        setCurrentPage(res.data.currentPage);
+      });
   };
 
   useEffect(() => {
@@ -50,7 +64,7 @@ const DashboardUser = () => {
     } catch (error) {
       toast.error("Error in fetching data");
     }
-  }, []);
+  }, [currentPage]);
 
   const Handlesubmit = async (id: number) => {
     try {
@@ -67,73 +81,107 @@ const DashboardUser = () => {
   };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-left">Name</TableHead>
-          <TableHead className="text-center">Registration Number</TableHead>
-          <TableHead className="text-center">Department</TableHead>
-          <TableHead className="text-center">Email</TableHead>
-          <TableHead className="text-right">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user, index) => (
-          <TableRow key={index} className="h-12">
-            <TableCell className="text-left font-medium">{user.name}</TableCell>
-            <TableCell className="text-center">{user.rnumber}</TableCell>
-            <TableCell className="text-center">{user.department}</TableCell>
-            <TableCell className="text-center">{user.email}</TableCell>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <TableCell className="float-right mr-3">
-                  <Ellipsis />
-                </TableCell>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>User Name</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    Edit User Information
-                    <DropdownMenuShortcut>
-                      <UserPen />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button
-                      onClick={() => {
-                        Handlesubmit(user._id);
-                      }}
-                    >
-                      Remove User
-                    </button>
-                    <DropdownMenuShortcut>
-                      <UserRoundX />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left">Name</TableHead>
+            <TableHead className="text-center">Registration Number</TableHead>
+            <TableHead className="text-center">Department</TableHead>
+            <TableHead className="text-center">Email</TableHead>
+            <TableHead className="text-right">Action</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell
-            colSpan={5}
-            className="text-right bg-white dark:bg-neutral-500"
-          >
-            <a
-              href="/"
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              <p className="text-custompink ">See All</p>
-            </a>
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {users.map((user, index) => (
+            <TableRow key={index} className="h-12">
+              <TableCell className="text-left font-medium">
+                {user.name}
+              </TableCell>
+              <TableCell className="text-center">{user.rnumber}</TableCell>
+              <TableCell className="text-center">{user.department}</TableCell>
+              <TableCell className="text-center">{user.email}</TableCell>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <TableCell className="float-right mr-3">
+                    <Ellipsis />
+                  </TableCell>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>User Name</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      Edit User Information
+                      <DropdownMenuShortcut>
+                        <UserPen />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <button
+                        onClick={() => {
+                          Handlesubmit(user._id);
+                        }}
+                      >
+                        Remove User
+                      </button>
+                      <DropdownMenuShortcut>
+                        <UserRoundX />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div>
+        <Pagination className="flex justify-end mt-1 mb-4">
+          <PaginationContent>
+            {currentPage > 1 && (
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => {
+                    if (currentPage > 1) {
+                      setCurrentPage((prev) => prev - 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+            )}
+            {Array.from({ length: page }, (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={currentPage === index + 1}
+                  onClick={() => {
+                    setCurrentPage((prev) => prev + 1);
+                  }}
+                  className={
+                    currentPage === index + 1
+                      ? "bg-custompink dark:bg-custompink"
+                      : ""
+                  }
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => {
+                  if (currentPage < page) {
+                    const next = currentPage + 1;
+                    setCurrentPage(next);
+                  }
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+    </>
   );
 };
 

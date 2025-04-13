@@ -37,7 +37,6 @@ import axios from "axios";
 const IssuedBookDashboard = () => {
   const [pages, setPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  console.log(pages, currentPage);
   const [issuedBook, setIssuedBook] = useState<
     {
       id: string;
@@ -49,7 +48,7 @@ const IssuedBookDashboard = () => {
       pages: number;
     }[]
   >([]);
-  console.log(issuedBook);
+
 
   const fetchIssuedBooks = async () => {
     const response = await axios.get(
