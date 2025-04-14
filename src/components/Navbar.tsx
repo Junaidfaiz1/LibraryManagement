@@ -19,18 +19,18 @@ export function Navbar() {
     <nav className="border-b bg-background/95 dark:bg-gray-800  backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center px-4">
         <div className="flex items-center gap-2 relative z-10">
-      
           <SidebarTrigger />
-       
-
           <span className="font-semibold text-lg">LibraryMS</span>
         </div>
 
         {/* Search Bar */}
         <div className="flex-1 flex justify-center">
-          <div className="relative w-full max-w-md">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search books, users..." className="pl-8" />
+          <div className="relative w-full max-w-md ">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 md:ml-2 hidden md:block  text-muted-foreground " />
+            <Input
+              placeholder="Search books, users..."
+              className="pl-8 md:w-64 md:ml-2  md:block hidden"
+            />
           </div>
         </div>
 

@@ -29,6 +29,10 @@ const BookSuggestion: React.FC = () => {
         autoplay={{ delay: 2500 }}
         spaceBetween={50}
         slidesPerView={5}
+        breakpoints={{
+          390: { slidesPerView: 1 },
+          768: { slidesPerView: 3 },
+        }}
         loop={true}
         scrollbar={{ draggable: true }}
         navigation
@@ -39,17 +43,20 @@ const BookSuggestion: React.FC = () => {
             <div>
               <img
                 src={suggestion.image}
-                style={{ filter: "grayscale(50%)", transition: "filter 0.3s", width: "100%" }}
+                style={{
+                  filter: "grayscale(50%)",
+                  transition: "filter 0.3s",
+                  width: "100%",
+                }}
                 alt={suggestion.author}
-
                 className="h-64 object-cover  rounded-lg"
-                onMouseOver={(e) =>
-                  {e.currentTarget.style.filter =
-                    "grayscale(0%) brightness(100%)"}
-                }
-                onMouseOut={(e) =>
-                  {e.currentTarget.style.filter = "grayscale(50%)"}
-                }
+                onMouseOver={(e) => {
+                  e.currentTarget.style.filter =
+                    "grayscale(0%) brightness(100%)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.filter = "grayscale(50%)";
+                }}
               />
               <p className="text-start">{suggestion.author}</p>
             </div>

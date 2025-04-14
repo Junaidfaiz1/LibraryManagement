@@ -98,10 +98,7 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
     };
 
     try {
-      const res = await axios.post(
-        ISSUE_BOOK_API,
-        payload
-      );
+      const res = await axios.post(ISSUE_BOOK_API, payload);
       if (res.status === 200) {
         fetchIssuedBooks();
         Toast.success("Book issued successfully");
@@ -111,7 +108,6 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
 
         setOpen(false);
       } else {
-        
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -134,40 +130,35 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="User" className="text-right">
-              User Name
-            </Label>
+            <Label htmlFor="User">User Name</Label>
             <Select
               onValueChange={(value) =>
                 setFormData({ ...formdata, userId: value })
               }
             >
-              <SelectTrigger className="w-[280px]">
+              <SelectTrigger className="w-[240px] md:w-[280px]">
                 <SelectValue placeholder="Select a User" />
               </SelectTrigger>
-              
-                <SelectContent >
+
+              <SelectContent>
                 {user.map((u, index) => (
                   <SelectGroup>
-                    <SelectItem key={index} value={u._id} >
+                    <SelectItem key={index} value={u._id}>
                       {u.name}
                     </SelectItem>
                   </SelectGroup>
-                    ))}
-                </SelectContent>
-            
+                ))}
+              </SelectContent>
             </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="Book" className="text-right">
-              Book Name
-            </Label>
+            <Label htmlFor="Book">Book Name</Label>
             <Select
               onValueChange={(value) =>
                 setFormData({ ...formdata, bookId: value })
               }
             >
-              <SelectTrigger className="w-[280px]">
+              <SelectTrigger className="w-[240px] md:w-[280px]">
                 <SelectValue placeholder="Select a Book" />
               </SelectTrigger>
               <SelectContent>
@@ -183,9 +174,7 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="DatePicker" className="text-right">
-              Issue Date
-            </Label>
+            <Label htmlFor="DatePicker">Issue Date</Label>
             <div className="grid grid-cols-4 items-center gap-4">
               <div className="col-span-3">
                 <Popover>
@@ -193,7 +182,7 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-[280px] justify-start text-left font-normal",
+                        "w-[240px] md:w-[280px] justify-start text-left font-normal",
                         !issueDate && "text-muted-foreground"
                       )}
                     >
@@ -219,16 +208,14 @@ const IssueBook = ({ fetchIssuedBooks }: { fetchIssuedBooks: () => void }) => {
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="ReturnDate" className="text-right">
-              Return Date
-            </Label>
+            <Label htmlFor="ReturnDate">Return Date</Label>
             <div className="col-span-3">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-[280px] justify-start text-left font-normal",
+                      "w-[240px] md:w-[280px]  justify-start text-left font-normal",
                       !returnDate && "text-muted-foreground"
                     )}
                   >
