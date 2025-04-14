@@ -34,7 +34,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BOOKS_DASHBOARD_API, DELETE_BOOK_API } from "@/apiRoute.ts";
 
-const DashboardUser = () => {
+const DashboardBooks = () => {
   const [page, setPage] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [books, setBooks] = useState<
@@ -46,9 +46,7 @@ const DashboardUser = () => {
       image: string;
     }[]
   >([]);
-  console.log(books);
-  console.log(currentPage);
-  console.log(page);
+
 
   const fetchBooks = async () => {
     axios.get(`${BOOKS_DASHBOARD_API}?page=${currentPage}`).then((res) => {
@@ -173,4 +171,4 @@ const DashboardUser = () => {
   );
 };
 
-export default DashboardUser;
+export default DashboardBooks;

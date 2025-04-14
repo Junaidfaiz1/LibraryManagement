@@ -17,5 +17,9 @@ export const Get_ISSUED_BOOKS_API = `${API_BASE_URL}/getissuedbooks`;
 export const RETURN_BOOK_API = `${API_BASE_URL}/returnbook`;
 export const OVERDUE_BOOK_API = `${API_BASE_URL}/overduebooks`;
 export const OVERDUE_PAID_API = `${API_BASE_URL}/overduepaid`;
+export const All_ISSUED_BOOKS_API = `${API_BASE_URL}/allissuedbooks`;
+export const ALL_BOOKS_API = `${API_BASE_URL}/books`;
+export const ALL_USERS_API = `${API_BASE_URL}/users`;
+export const ALL_OVERDUE_BOOKS_API = `${API_BASE_URL}/alloverduebooksdetails`;
 
 

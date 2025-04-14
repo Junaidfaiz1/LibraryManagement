@@ -1,0 +1,137 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { NotebookPen } from "lucide-react";
+import { BookX } from "lucide-react";
+import { Ellipsis } from "lucide-react";
+
+import { useState, useEffect } from "react";
+import { Toast } from "@/components/ToastMessage";
+import axios from "axios";
+import { All_ISSUED_BOOKS_API, RETURN_BOOK_API } from "@/apiRoute";
+
+const IssuedBooks = () => {
+  const [issuedBook, setIssuedBook] = useState<
+    {
+      id: string;
+      bookTitle: string;
+      issueDate: string;
+      returnDate: string;
+      userName: string;
+    }[]
+  >([]);
+
+  const fetchIssuedBooks = async () => {
+    const response = await axios.get(`${All_ISSUED_BOOKS_API}`);
+    setIssuedBook(response.data.formattedData);
+  };
+
+  useEffect(() => {
+    try {
+      fetchIssuedBooks();
+    } catch (error) {
+      Toast.error("Error fetching issued books:");
+    }
+  }, []);
+
+  const HandleReturn = async (id: string) => {
+    try {
+      const response = await axios.put(`${RETURN_BOOK_API}/${id}`);
+      if (response.status === 200) {
+        Toast.success("Book returned successfully!");
+        setIssuedBook((prevBooks) =>
+          prevBooks.filter((book) => book.id !== id)
+        );
+      } else {
+        Toast.error("Error returning the book!");
+      }
+    } catch (error) {
+      console.error("Error returning the book:", error);
+      Toast.error("Error returning the book!");
+    }
+  };
+
+  return (
+    <div className=" bg-white dark:bg-neutral-500 rounded-2xl flex flex-col">
+      <div className="flex justify-between items-center p-4">
+        <h1 className="text-xl sm:text-2xl font-bold dark:text-white text-gray-700">
+          Issue Book
+        </h1>
+      </div>
+      {!issuedBook.length ? (
+        <div className="flex justify-center items-center h-40">
+          <NotebookPen className="h-10 w-10 text-gray-500" />
+          <p className="text-gray-500">No Issued Books</p>
+        </div>
+      ) : (
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow className="h-12 ">
+              <TableHead className="text-left">Book Name</TableHead>
+              <TableHead>Taken By</TableHead>
+              <TableHead>Issued Date</TableHead>
+              <TableHead>Return Date</TableHead>
+              <TableHead className="text-right">Details</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {issuedBook.map((book, index) => (
+              <TableRow className="h-12 " key={index}>
+                <TableCell className="text-left font-medium">
+                  {book.bookTitle}
+                </TableCell>
+                <TableCell>{book.userName}</TableCell>
+                <TableCell>{book.issueDate}</TableCell>
+                <TableCell>{book.returnDate}</TableCell>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TableCell className="float-right mr-3">
+                      <Ellipsis />
+                    </TableCell>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Book Name</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        <button
+                          type="button"
+                          onClick={() => HandleReturn(book.id)}
+                        >
+                          Book Returned
+                        </button>
+
+                        <DropdownMenuShortcut>
+                          <BookX />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </div>
+  );
+};
+
+export default IssuedBooks;
