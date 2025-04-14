@@ -28,15 +28,15 @@ const BookSuggestion: React.FC = () => {
         modules={[Navigation, Autoplay]}
         autoplay={{ delay: 2500 }}
         spaceBetween={50}
-        slidesPerView={5}
         breakpoints={{
-          390: { slidesPerView: 1 },
-          768: { slidesPerView: 3 },
+          640: { width: 640, slidesPerView: 1 },
+          768: { width: 768, slidesPerView: 3 },
+          1024: { width: 1024, slidesPerView: 5 },
         }}
         loop={true}
         scrollbar={{ draggable: true }}
         navigation
-        className="py-16  mt-4 mb-6"
+        className="py-16 mt-4 mb-6"
       >
         {suggestion.map((suggestion, index) => (
           <SwiperSlide key={index}>
