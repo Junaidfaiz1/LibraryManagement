@@ -1,6 +1,6 @@
-const API_BASE_URL = "http://localhost:3000/api"
+export const API_BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
 export const ADD_BOOKS_API = `${API_BASE_URL}/addbooks`;
-export const BOOKS_DASHBOARD_API = `${API_BASE_URL}/bookdashboard`; // pages= {page} params
+export const BOOKS_DASHBOARD_API = `${API_BASE_URL}/bookdashboard`; 
 export const REGISTER_USER_API = `${API_BASE_URL}/register`;
 export const TOP_CHOICES_API = `${API_BASE_URL}/topchoices`;
 export const DELETE_BOOK_API = `${API_BASE_URL}/deletebook`;

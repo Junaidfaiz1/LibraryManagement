@@ -50,7 +50,6 @@ const AddBook = () => {
     }
   };
 
-  console.log("add books", import.meta.env.BASE_URL);
 
   const HandelSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
